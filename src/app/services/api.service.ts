@@ -13,7 +13,6 @@ export class ApiService {
   private repoCache = new Map<string, Repository[]>();
 
   private headers = new HttpHeaders({
-    'Authorization': 'Bearer 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'
   });
 
   constructor(
