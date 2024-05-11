@@ -1,0 +1,82 @@
+
+<div class="flex flex-col justify-evenly">
+
+    <div class="flex flex-row bg-slate-100 rounded-lg mt-14 mx-7 p-10 shadow-lg  shadow-black">
+        <div class="px-10 " >
+            <img src="{{this.user.avatar_url}}" class="h-[20vw]" alt="user img">
+        </div>
+        <div  class="px-10"> 
+            <h1 class="text-5xl font-bold py-5">{{user.login}}</h1>
+            <h1 class="text-3xl"> {{user.email}}</h1>
+            <h1 class="text-3xl"> Location : {{user.location}}</h1>
+            <br>
+            <h1 class="border-2 border-black my-2 p-1">BIO <br>{{user.bio}}</h1>
+            <h1 class="text-2xl">Type:{{user.type}}</h1>
+            <div *ngIf="user.twitter_username">
+                <h1 class="text-2xl m-1">Twitter : <a class="text-blue-500 underline" href="http://www.twitter.com/{{user.twitter_username}}">www.twitter.com/{{user.twitter_username}}</a> </h1>
+            </div>
+            <h1>Followers : {{user.followers}} | Following : {{user.following}}</h1>
+        </div>
+    </div>
+  <div class="grid grid-cols-3">
+
+      <h1 class="mt-10 mx-10">🔗<a href="{{user.html_url}}" class="text-blue-700  font-semibold text-shadow underline ">{{user.html_url}}</a></h1>
+      <h1 class="text-center mt-10 mx-10 text-lg text-bold"> Total repository : {{user.public_repos}}</h1>
+      <select class="mt-10 mx-10 border-2 border-gray-400 selection:shadow-sm selection:shadow-black" name="perpage" [(ngModel)]="perpage" (ngModelChange)="change()">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="40">40</option>
+        <option value="50">50</option>
+        <option value="60">60</option>
+        <option value="70">70</option>
+        <option value="80">80</option>
+        <option value="90">90</option>
+        <option value="100">100</option>
+      </select>
+      
+    </div>
+    <div class="flex flex-wrap justify-between mt-10">
+        <div  *ngFor="let repo of repository">
+            <div (click)="redirect(repo.html_url)"  class="rounded-lg w-[400px] hover:cursor-pointer m-10 bg-slate-200 shadow-md m-auto my-7 p-5 shadow-black">
+
+                
+                    
+                    <h1 class="font-bold ">{{repo.full_name}}</h1>
+                    <h2 >{{repo.description}}</h2>
+                    <div *ngFor="let topic of repo.topics" class="inline-flex flex-wrap">
+                        <h5 class="bg-cyan-500 shadow-sm m-1 p-1 inline-block ">{{topic}}</h5>
+                    </div>
+                    
+                
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-around">
+<button [disabled]="page<=1 " (click)="prev()" class="bg-sky-400 disabled:hover:cursor-not-allowed disabled:bg-slate-500 disabled:border-slate-500 p-1 border-2 border-sky-500 hover:shadow-sm hover:shadow-black"> < </button>
+
+<div class="flex flex-row justify-between" *ngIf="page < 6; else elseBlock">
+    <div *ngFor="let but of getpageindex()">
+      <button [disabled]='but===page' (click)="gotopg(but)" class="disabled:bg-slate-500 disabled:hover:cursor-not-allowed disabled:border-slate-500 border-2 border-black hover:shadow-sm hover:text-xl p-2 bg-sky-500 m-2 hover:m-1">
+        {{ but }}
+      </button>
+    </div>
+  </div>
+  
+  <ng-template #elseBlock>
+    <div class="flex flex-row justify-between">
+      <button (click)="gotopg(1)" class="disabled:bg-slate-500 disabled:hover:cursor-not-allowed disabled:border-slate-500 border-2 border-black hover:shadow-sm hover:text-xl p-2 bg-sky-500 m-2 hover:m-1">
+          1
+      </button>
+      <h1 class="w-3 font-bold mt-7">...</h1>
+      <span *ngFor="let but of currentIndex()">
+          <button [disabled]='but===page' (click)="gotopg(but)" class="disabled:bg-slate-500 disabled:hover:cursor-not-allowed disabled:border-slate-500 border-2 border-black hover:shadow-sm hover:text-xl p-2 bg-sky-500 m-2 hover:m-1">
+              {{ but }}
+            </button>
+      </span>
+    </div>
+  </ng-template>
+  
+  <button (click)="next()" [disabled]="page===total_pages" class="bg-sky-500 p-1 border-2 border-blue-400 disabled:bg-slate-500 disabled:border-slate-500 hover:shadow-sm hover:shadow-black disabled:hover:cursor-not-allowed"> > </button>
+
+</div>
